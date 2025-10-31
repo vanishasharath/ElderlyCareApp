@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.elderlycareappnoai">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="ElderlyCareAppnoai"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ElderlyCareAppnoai"
+        tools:targetApi="31">
+
+        <!-- Notification Center for both Reminders and Appointments -->
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="true" />
+
+        <!-- Reminder Activity -->
+        <activity
+            android:name=".ReminderActivity"
+            android:exported="true" />
+
+        <!-- Appointments -->
+        <activity
+            android:name=".AppointmentsActivity"
+            android:exported="true" />
+
+        <!-- Check-in -->
+        <activity
+            android:name=".CheckinActivity"
+            android:exported="true" />
+
+        <!-- Entertainment -->
+        <activity
+            android:name=".EntertainmentActivity"
+            android:exported="true" />
+
+        <!-- Emergency -->
+        <activity
+            android:name=".EmergencyActivity"
+            android:exported="true" />
+
+        <!-- Medical Records -->
+        <activity
+            android:name=".MedicalRecordsActivity"
+            android:exported="true" />
+
+        <!-- Main Menu -->
+        <activity
+            android:name=".Maincode"
+            android:exported="true"
+            android:label="ElderlyCareAppnoai" />
+
+        <!-- Login (Launcher) -->
+        <activity
+            android:name=".LoginPage"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

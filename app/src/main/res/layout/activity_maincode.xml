@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".Maincode">
+
+        <Button
+            android:id="@+id/medicalRecordsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medical Records" />
+
+        <Button
+            android:id="@+id/remindersBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reminders" />
+
+        <Button
+            android:id="@+id/entertainmentBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Entertainment" />
+
+        <Button
+            android:id="@+id/emergencyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Emergency" />
+
+        <Button
+            android:id="@+id/checkinBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daily Check-In" />
+
+        <Button
+            android:id="@+id/appointmentsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Appointments" />
+
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FF4C4C"
+            android:textColor="@android:color/white"
+            android:layout_margin="16dp" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
