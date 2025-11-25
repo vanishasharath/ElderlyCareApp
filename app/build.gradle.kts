@@ -71,6 +71,10 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-database:20.3.3")
+
+
 
     // OkHttp + Gson (used for REST Gemini)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
