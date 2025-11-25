@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">ElderlyCareAppnoai</string>
+    <string name="entertainment_center_title">🎉 Entertainment Center</string>
+    <string name="entertainment_center_prompt">Tap a button below to get started!</string>
+    <string name="tell_me_a_joke">😂 Tell Me a Joke</string>
+    <string name="give_me_a_fact">💡 Give Me a Fact</string>
+    <string name="play_relaxing_music">🎵 Play Relaxing Music</string>
+    <string name="stop_music">⏹ Stop Music</string>
+    <string name="back_to_main_menu">⬅ Back to Main Menu</string>
+    <string name="joke_format">😂 %1$s</string>
+    <string name="fact_format">💡 %1$s</string>
+    <string name="enter_reminder">Enter reminder</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="view_all_reminders">View All Reminders</string>
+    <string name="delete_all_reminders">Delete All Reminders</string>
+    <string name="go_to_notifications">Go to Notifications</string>
+    <string name="send_reminder_notification">Send Reminder Notification</string>
+
+    <string-array name="jokes">
+        <item>Why did the scarecrow win an award? Because he was outstanding in his field!</item>
+        <item>What do you call cheese that isn’t yours? Nacho cheese!</item>
+        <item>Why don’t skeletons fight each other? They don’t have the guts!</item>
+    </string-array>
+
+    <string-array name="facts">
+        <item>Honey never spoils. Archaeologists found 3,000-year-old honey still edible!</item>
+        <item>Bananas are berries, but strawberries are not.</item>
+        <item>Octopuses have three hearts and blue blood.</item>
+    </string-array>
 </resources>

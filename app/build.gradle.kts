@@ -1,20 +1,38 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.services)
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
 }
 
 android {
     namespace = "com.example.elderlycareappnoai"
-    compileSdk = 34 // ✅ Fixed syntax
+    compileSdk = 34
+    buildToolsVersion = "35.0.0"
 
     defaultConfig {
         applicationId = "com.example.elderlycareappnoai"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Gemini API key from local.properties
+        buildConfigField(
+            "String",
+            "GEMINI_API_KEY",
+            "\"${localProperties.getProperty("GEMINI_API_KEY")}\""
+        )
     }
 
     buildTypes {
@@ -27,21 +45,18 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+
     compileOptions {
-        // ✅ Use Java 17 if supported, else switch to VERSION_14
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
         jvmTarget = "17"
-    }
-
-    // ✅ Disable compose if not needed
-    buildFeatures {
-        compose = false
-        viewBinding= true
-        dataBinding = true// easier XML handling
     }
 }
 
@@ -51,7 +66,17 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+
+    // OkHttp + Gson (used for REST Gemini)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation(libs.guava)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

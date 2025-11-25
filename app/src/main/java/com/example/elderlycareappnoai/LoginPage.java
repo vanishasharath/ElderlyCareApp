@@ -1,74 +1,78 @@
 package com.example.elderlycareappnoai;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.elderlycareappnoai.databinding.ActivityLoginPageBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginPage extends AppCompatActivity {
 
     private ActivityLoginPageBinding binding;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String savedName = prefs.getString("username", null);
-
-        // ✅ If already logged in, go directly to Maincode
-        if (savedName != null) {
-            startActivity(new Intent(this, Maincode.class));
-            finish();
-            return;
-        }
-
         binding = ActivityLoginPageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 🔹 Register new user (now stays on login screen)
-        binding.registerBtn.setOnClickListener(v -> {
-            String name = binding.nameInput.getText().toString().trim();
-            String phone = binding.phoneInput.getText().toString().trim();
+        mAuth = FirebaseAuth.getInstance();
 
-            if (name.isEmpty() || phone.isEmpty()) {
-                binding.nameInput.setError("Enter name");
-                binding.phoneInput.setError("Enter phone");
+        binding.registerBtn.setOnClickListener(v -> {
+            String email = binding.emailInput.getText().toString().trim();
+            String password = binding.passwordInput.getText().toString().trim();
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Save new user details
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("username", name);
-            editor.putString("phone", phone);
-            editor.apply();
-
-            // ✅ Show message instead of going to main page
-            binding.nameInput.setText("");
-            binding.phoneInput.setText("");
-            binding.nameInput.setHint("Enter your name to login");
-            binding.phoneInput.setHint("Enter your phone to login");
-
-            // Optional: Toast message
-            android.widget.Toast.makeText(this, "Registration successful! Please log in.", android.widget.Toast.LENGTH_SHORT).show();
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            startActivity(new Intent(LoginPage.this, Maincode.class));
+                            finish();
+                        } else {
+                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Registration failed. Please try again.";
+                            Toast.makeText(LoginPage.this, "Registration Failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    });
         });
 
-        // 🔹 Login existing user
         binding.loginBtn.setOnClickListener(v -> {
-            String name = binding.nameInput.getText().toString().trim();
-            String phone = binding.phoneInput.getText().toString().trim();
+            String email = binding.emailInput.getText().toString().trim();
+            String password = binding.passwordInput.getText().toString().trim();
 
-            String savedUser = prefs.getString("username", null);
-            String savedPhone = prefs.getString("phone", null);
-
-            if (name.equals(savedUser) && phone.equals(savedPhone)) {
-                startActivity(new Intent(this, Maincode.class));
-                finish();
-            } else {
-                binding.nameInput.setError("Invalid name");
-                binding.phoneInput.setError("Invalid phone");
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            startActivity(new Intent(LoginPage.this, Maincode.class));
+                            finish();
+                        } else {
+                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Login failed. Please check your credentials.";
+                            Toast.makeText(LoginPage.this, "Login Failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    });
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            startActivity(new Intent(this, Maincode.class));
+            finish();
+        }
     }
 }

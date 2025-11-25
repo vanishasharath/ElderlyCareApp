@@ -1,9 +1,10 @@
 package com.example.elderlycareappnoai;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-import android.content.Intent;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.elderlycareappnoai.databinding.ActivityEntertainmentBinding;
 
@@ -12,17 +13,8 @@ import java.util.Random;
 public class EntertainmentActivity extends AppCompatActivity {
 
     private ActivityEntertainmentBinding binding;
-    private String[] jokes = {
-            "Why did the scarecrow win an award? Because he was outstanding in his field!",
-            "What do you call cheese that isn’t yours? Nacho cheese!",
-            "Why don’t skeletons fight each other? They don’t have the guts!"
-    };
-
-    private String[] facts = {
-            "Honey never spoils. Archaeologists found 3,000-year-old honey still edible!",
-            "Bananas are berries, but strawberries are not.",
-            "Octopuses have three hearts and blue blood."
-    };
+    private String[] jokes;
+    private String[] facts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +22,43 @@ public class EntertainmentActivity extends AppCompatActivity {
         binding = ActivityEntertainmentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Load jokes and facts from resources
+        jokes = getResources().getStringArray(R.array.jokes);
+        facts = getResources().getStringArray(R.array.facts);
+
         Random random = new Random();
 
-        // Show a random joke
+        // Joke button
         binding.jokeBtn.setOnClickListener(v -> {
             int index = random.nextInt(jokes.length);
-            binding.resultText.setText("😂 " + jokes[index]);
+            binding.resultText.setText(getString(R.string.joke_format, jokes[index]));
             Toast.makeText(this, "Here's a joke!", Toast.LENGTH_SHORT).show();
         });
 
-        // Show a random fact
+        // Fact button
         binding.factBtn.setOnClickListener(v -> {
             int index = random.nextInt(facts.length);
-            binding.resultText.setText("💡 " + facts[index]);
+            binding.resultText.setText(getString(R.string.fact_format, facts[index]));
             Toast.makeText(this, "Interesting fact!", Toast.LENGTH_SHORT).show();
         });
 
-        // Back to main menu
+        // 🎵 Play music
+        binding.playMusicBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MusicService.class);
+            intent.setAction("PLAY");
+            startService(intent);
+            Toast.makeText(this, "Music started 🎶", Toast.LENGTH_SHORT).show();
+        });
+
+        // ⏹ Stop music
+        binding.stopMusicBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MusicService.class);
+            intent.setAction("STOP");
+            startService(intent);
+            Toast.makeText(this, "Music stopped ⛔", Toast.LENGTH_SHORT).show();
+        });
+
+        // Back button
         binding.backBtn.setOnClickListener(v -> {
             Intent intent = new Intent(EntertainmentActivity.this, Maincode.class);
             startActivity(intent);

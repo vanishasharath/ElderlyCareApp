@@ -16,19 +16,19 @@
         android:layout_marginBottom="32dp" />
 
     <EditText
-        android:id="@+id/nameInput"
+        android:id="@+id/emailInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Name"
-        android:inputType="textPersonName"
+        android:hint="Enter Email"
+        android:inputType="textEmailAddress"
         android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/phoneInput"
+        android:id="@+id/passwordInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Phone"
-        android:inputType="phone"
+        android:hint="Enter Password"
+        android:inputType="textPassword"
         android:layout_marginBottom="24dp" />
 
     <Button

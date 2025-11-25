@@ -59,18 +59,10 @@
             android:textColor="@android:color/white"
             android:layout_marginBottom="10dp" />
 
-        <Button
-            android:id="@+id/familyBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Call Family 📞"
-            android:backgroundTint="#43A047"
-            android:textColor="@android:color/white" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Emergency Contacts"
+            android:text="Add a Personal Contact"
             android:textStyle="bold"
             android:textSize="18sp"
             android:paddingTop="20dp"
@@ -87,8 +79,9 @@
             android:id="@+id/contactNumberInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter contact number"
-            android:inputType="phone"
+            android:hint="Enter 10-digit mobile number"
+            android:inputType="number"
+            android:maxLength="10"
             android:layout_marginTop="5dp" />
 
         <Button
@@ -97,6 +90,15 @@
             android:layout_height="wrap_content"
             android:text="Add Contact"
             android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/deleteContactsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete All Contacts"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF" />
 
         <ListView
             android:id="@+id/contactListView"

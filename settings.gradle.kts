@@ -1,13 +1,7 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
+        google()
+        mavenCentral() // This line tells Gradle where to find the Gemini SDK
         gradlePluginPortal()
     }
 }
@@ -15,9 +9,8 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        mavenCentral()
+        mavenCentral() // This line is also needed here
     }
 }
-
-rootProject.name = "ElderlyCareAppnoai"
+rootProject.name = "ElderlyCareAppnoai" // Use your project's root name
 include(":app")

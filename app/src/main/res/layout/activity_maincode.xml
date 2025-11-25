@@ -57,6 +57,12 @@
             android:textColor="@android:color/white"
             android:layout_margin="16dp" />
 
+        <Button
+            android:id="@+id/voiceBtn"
+            android:text="🎙 Voice Assistant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
