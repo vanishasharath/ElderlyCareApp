@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.elderlycareappnoai.databinding.ActivityReminderBinding;
+import com.example.elderlycareappnoai.databinding.ActivityAppointmentsBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,70 +24,69 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
-public class ReminderActivity extends AppCompatActivity {
+public class AppointmentActivity extends AppCompatActivity {
 
-    private ActivityReminderBinding binding;
+    private ActivityAppointmentsBinding binding;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
-    private ArrayList<ReminderItem> reminderItems;
-    private ReminderAdapter adapter;
+    private ArrayList<AppointmentItem> appointmentItems;
+    private AppointmentAdapter adapter;
     private SharedPreferences sharedPreferences;  // ADD THIS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityReminderBinding.inflate(getLayoutInflater());
+        binding = ActivityAppointmentsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        sharedPreferences = getSharedPreferences("reminders", MODE_PRIVATE);  // ADD THIS
+        sharedPreferences = getSharedPreferences("appointments", MODE_PRIVATE);  // ADD THIS
 
         if (currentUser == null) {
             finish();
             return;
         }
 
-        NotificationHelper.createNotificationChannel(this);
+        appointmentItems = new ArrayList<>();
+        adapter = new AppointmentAdapter(this, appointmentItems, this::saveCheckboxState);  // MODIFIED
+        binding.appointmentsListView.setAdapter(adapter);
 
-        reminderItems = new ArrayList<>();
-        adapter = new ReminderAdapter(this, reminderItems, this::saveCheckboxState);  // MODIFIED
-        binding.reminderList.setAdapter(adapter);
+        loadAppointments();
 
-        loadReminders();
-
-        binding.setReminderBtn.setOnClickListener(v -> showDatePickerDialog());
-        binding.deleteSelectedBtn.setOnClickListener(v -> deleteSelectedReminders());
-        binding.deleteBtn.setOnClickListener(v -> deleteAllReminders());
+        binding.setAppointmentBtn.setOnClickListener(v -> showDatePickerDialog());
+        binding.deleteSelectedBtn.setOnClickListener(v -> deleteSelectedAppointments());
+        binding.deleteBtn.setOnClickListener(v -> deleteAllAppointments());
         binding.backBtn.setOnClickListener(v -> finish());
     }
 
-    private void loadReminders() {
-        db.collection("users").document(currentUser.getUid()).collection("reminders")
+    private void loadAppointments() {
+        db.collection("users").document(currentUser.getUid()).collection("appointments")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        reminderItems.clear();
+                        appointmentItems.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String docId = document.getId();
                             String text = document.getString("text");
                             String time = document.getString("displayDateTime");
-
-                            ReminderItem newItem = new ReminderItem(docId, time + ": " + text);
+                            AppointmentItem newItem = new AppointmentItem(docId, time + ": " + text);
 
                             // RESTORE CHECKBOX STATE FROM SHAREDPREFERENCES
-                            boolean isChecked = sharedPreferences.getBoolean("reminder_" + docId, false);
+                            boolean isChecked = sharedPreferences.getBoolean("appointment_" + docId, false);
                             newItem.setChecked(isChecked);
 
-                            reminderItems.add(newItem);
+                            appointmentItems.add(newItem);
                         }
                         adapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(this, "Error loading reminders.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error loading appointments.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -95,35 +94,35 @@ public class ReminderActivity extends AppCompatActivity {
     // ADD THIS METHOD - Called by adapter when checkbox is clicked
     private void saveCheckboxState(String documentId, boolean isChecked) {
         sharedPreferences.edit()
-                .putBoolean("reminder_" + documentId, isChecked)
+                .putBoolean("appointment_" + documentId, isChecked)
                 .apply();
     }
 
-    private void deleteSelectedReminders() {
-        ArrayList<ReminderItem> itemsToRemove = new ArrayList<>();
-        for (ReminderItem item : reminderItems) {
+    private void deleteSelectedAppointments() {
+        ArrayList<AppointmentItem> itemsToRemove = new ArrayList<>();
+        for (AppointmentItem item : appointmentItems) {
             if (item.isChecked()) {
                 db.collection("users").document(currentUser.getUid())
-                        .collection("reminders").document(item.getDocumentId()).delete();
+                        .collection("appointments").document(item.getDocumentId()).delete();
 
                 // REMOVE FROM SHAREDPREFERENCES TOO
-                sharedPreferences.edit().remove("reminder_" + item.getDocumentId()).apply();
+                sharedPreferences.edit().remove("appointment_" + item.getDocumentId()).apply();
 
                 itemsToRemove.add(item);
             }
         }
         if (itemsToRemove.isEmpty()) {
-            Toast.makeText(this, "No reminders selected.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No appointments selected.", Toast.LENGTH_SHORT).show();
         } else {
-            loadReminders();
-            Toast.makeText(this, "Selected reminders deleted.", Toast.LENGTH_SHORT).show();
+            loadAppointments();
+            Toast.makeText(this, "Selected appointments deleted.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showDatePickerDialog() {
-        String reminderText = binding.reminderInput.getText().toString().trim();
-        if (reminderText.isEmpty()) {
-            Toast.makeText(this, "Please enter reminder text before setting a date and time.", Toast.LENGTH_LONG).show();
+        String appointmentText = binding.appointmentInput.getText().toString().trim();
+        if (appointmentText.isEmpty()) {
+            Toast.makeText(this, "Please enter appointment details before setting a date.", Toast.LENGTH_LONG).show();
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -135,21 +134,21 @@ public class ReminderActivity extends AppCompatActivity {
         }
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, year, month, dayOfMonth) -> showTimePickerDialog(reminderText, year, month, dayOfMonth),
+                (view, year, month, dayOfMonth) -> showTimePickerDialog(appointmentText, year, month, dayOfMonth),
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 
-    private void showTimePickerDialog(String reminderText, int year, int month, int dayOfMonth) {
+    private void showTimePickerDialog(String appointmentText, int year, int month, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                (view, hourOfDay, minute) -> saveAndScheduleReminder(reminderText, year, month, dayOfMonth, hourOfDay, minute),
+                (view, hourOfDay, minute) -> saveAndScheduleAppointment(appointmentText, year, month, dayOfMonth, hourOfDay, minute),
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
         timePickerDialog.show();
     }
 
-    private void saveAndScheduleReminder(String reminderText, int year, int month, int dayOfMonth, int hour, int minute) {
+    private void saveAndScheduleAppointment(String appointmentText, int year, int month, int dayOfMonth, int hour, int minute) {
         Calendar scheduledCalendar = Calendar.getInstance();
         scheduledCalendar.set(year, month, dayOfMonth, hour, minute, 0);
         long triggerAtMillis = scheduledCalendar.getTimeInMillis();
@@ -159,35 +158,36 @@ public class ReminderActivity extends AppCompatActivity {
         }
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm a", Locale.US);
         String displayDateTime = sdf.format(scheduledCalendar.getTime());
-        Map<String, Object> reminder = new HashMap<>();
-        reminder.put("text", reminderText);
-        reminder.put("displayDateTime", displayDateTime);
-        reminder.put("timestamp", triggerAtMillis);
-        db.collection("users").document(currentUser.getUid()).collection("reminders")
-                .add(reminder)
+        Map<String, Object> appointment = new HashMap<>();
+        appointment.put("text", appointmentText);
+        appointment.put("displayDateTime", displayDateTime);
+        appointment.put("timestamp", triggerAtMillis);
+        db.collection("users").document(currentUser.getUid()).collection("appointments")
+                .add(appointment)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(this, "Reminder Set!", Toast.LENGTH_SHORT).show();
-                    loadReminders();
-                    binding.reminderInput.setText("");
+                    Toast.makeText(this, "Appointment Set!", Toast.LENGTH_SHORT).show();
+                    loadAppointments();
+                    binding.appointmentInput.setText("");
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        NotificationHelper.scheduleNotification(this, triggerAtMillis, "Reminder: " + reminderText, ReminderActivity.class);
+
+        NotificationHelper.scheduleNotification(this, triggerAtMillis, "Appointment: " + appointmentText, AppointmentActivity.class);
     }
 
-    private void deleteAllReminders() {
-        db.collection("users").document(currentUser.getUid()).collection("reminders")
+    private void deleteAllAppointments() {
+        db.collection("users").document(currentUser.getUid()).collection("appointments")
                 .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // CLEAR ALL CHECKBOX STATES
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             document.getReference().delete();
-                            editor.remove("reminder_" + document.getId());
+                            editor.remove("appointment_" + document.getId());
                         }
                         editor.apply();
 
-                        Toast.makeText(this, "All reminders deleted.", Toast.LENGTH_SHORT).show();
-                        loadReminders();
+                        Toast.makeText(this, "All appointments deleted.", Toast.LENGTH_SHORT).show();
+                        loadAppointments();
                     }
                 });
     }
@@ -197,7 +197,7 @@ public class ReminderActivity extends AppCompatActivity {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             if (alarmManager != null && !alarmManager.canScheduleExactAlarms()) {
                 Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                Toast.makeText(this, "Please grant permission to schedule reminders.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Please grant permission to schedule appointments.", Toast.LENGTH_LONG).show();
                 startActivity(intent);
             }
         }

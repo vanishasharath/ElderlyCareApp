@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
-    android:padding="16dp">
+    android:background="#F5EEDC"
+    android:padding="20dp"
+    tools:context=".EntertainmentActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -11,77 +14,112 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Title -->
         <TextView
             android:id="@+id/titleText"
-            android:text="@string/entertainment_center_title"
-            android:textSize="22sp"
+            android:text="Entertainment Center"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="#4B4B4B"
             android:gravity="center"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- Display jokes or facts -->
-        <TextView
-            android:id="@+id/resultText"
-            android:text="@string/entertainment_center_prompt"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:textColor="#444"
-            android:background="@drawable/result_box"
+        <LinearLayout
+            android:id="@+id/resultContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
             android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="24dp">
 
-        <!-- Buttons for jokes and facts -->
-        <Button
-            android:id="@+id/jokeBtn"
-            android:text="@string/tell_me_a_joke"
-            android:backgroundTint="#4CAF50"
-            android:textColor="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp" />
+            <TextView
+                android:id="@+id/resultText"
+                android:text="Tap a tile to begin!"
+                android:textSize="18sp"
+                android:textColor="#0D1B2A"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/factBtn"
-            android:text="@string/give_me_a_fact"
-            android:backgroundTint="#2196F3"
-            android:textColor="#FFFFFF"
+        <!-- Row 1 -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" />
+            android:layout_height="140dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
 
-        <!-- Music controls -->
-        <Button
-            android:id="@+id/playMusicBtn"
-            android:text="@string/play_relaxing_music"
-            android:backgroundTint="#9C27B0"
-            android:textColor="#FFFFFF"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/jokeBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Jokes"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:padding="10dp"
+                app:backgroundTint="#66BB6A"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/factBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Facts"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:padding="10dp"
+                app:backgroundTint="#42A5F5"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Row 2 -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp" />
+            android:layout_height="140dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
 
-        <Button
-            android:id="@+id/stopMusicBtn"
-            android:text="@string/stop_music"
-            android:backgroundTint="#E91E63"
-            android:textColor="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/playMusicBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Play Music"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:padding="10dp"
+                app:backgroundTint="#AB47BC"
+                android:layout_marginEnd="8dp" />
 
-        <!-- Back button -->
-        <Button
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/stopMusicBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Stop Music"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:padding="10dp"
+                app:backgroundTint="#EF5350"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/backBtn"
-            android:text="@string/back_to_main_menu"
-            android:backgroundTint="#FF9800"
-            android:textColor="#FFFFFF"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:text="Back to Main Menu"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#0D1B2A"
+            android:padding="12dp"
+            app:backgroundTint="#D6ECFF" />
     </LinearLayout>
 </ScrollView>

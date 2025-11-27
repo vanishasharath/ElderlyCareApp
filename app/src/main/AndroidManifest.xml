@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.elderlycareappnoai">
-    <!-- Permissions required for app features -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,51 +16,38 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ElderlyCareAppnoai"
+        android:theme="@style/Theme.ElderlyCareAppFinal"
         tools:targetApi="31">
-        <activity
-            android:name=".ReminderReceiver"
-            android:exported="false" />
-        <!-- This is the correct receiver for notifications -->
-        <receiver
-            android:name=".NotificationHelper"
-            android:enabled="true"
-            android:exported="true" /> <!-- Activities -->
-        <activity android:name=".VoiceAssistantActivity" />
-        <activity
-            android:name=".ReminderActivity"
-            android:exported="true" />
-        <activity
-            android:name=".AppointmentsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".CheckinActivity"
-            android:exported="true" />
-        <activity
-            android:name=".EntertainmentActivity"
-            android:exported="true" />
-        <activity
-            android:name=".EmergencyActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MedicalRecordsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Maincode"
-            android:exported="true" />
+
         <activity
             android:name=".LoginPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Services -->
+        </activity>
+
+        <activity android:name=".Maincode" />
+        <!-- DEFINITIVE FIX: Use the single, correct name -->
+        <activity android:name=".AppointmentActivity" /> 
+        <activity android:name=".ReminderActivity" />
+        <activity android:name=".MedicalRecordsActivity" />
+        <activity android:name=".EmergencyActivity" />
+        <activity android:name=".EntertainmentActivity" />
+        <activity android:name=".CheckinActivity" />
+        <activity android:name=".VoiceAssistantActivity" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".SettingsActivity" />
+
+        <receiver
+            android:name=".NotificationHelper"
+            android:enabled="true"
+            android:exported="true" />
+
         <service
             android:name=".MusicService"
-            android:enabled="true"
-            android:exported="false" />
+            android:enabled="true" />
     </application>
 
 </manifest>

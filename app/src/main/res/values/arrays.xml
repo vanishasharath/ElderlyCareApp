@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Jokes Array -->
+    <string-array name="jokes">
+        <item>Why did the scarecrow win an award? Because he was outstanding in his field!</item>
+        <item>What do you call cheese that isn’t yours? Nacho cheese!</item>
+        <item>Why don’t skeletons fight each other? They don’t have the guts!</item>
+    </string-array>
+
+    <!-- Facts Array -->
+    <string-array name="facts">
+        <item>Honey never spoils. Archaeologists found 3,000-year-old honey still edible!</item>
+        <item>Bananas are berries, but strawberries are not.</item>
+        <item>Octopuses have three hearts and blue blood.</item>
+    </string-array>
+
+</resources>

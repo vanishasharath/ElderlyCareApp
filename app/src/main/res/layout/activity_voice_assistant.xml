@@ -1,38 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="30dp"
-    android:gravity="center">
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="#F5EEDC">
 
+    <!-- Title -->
+    <TextView
+        android:id="@+id/voiceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voice Assistant 🎤"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#4B4B4B"
+        android:layout_marginBottom="18dp" />
+
+    <!-- Instruction Text -->
     <TextView
         android:id="@+id/textView"
-        android:text="Press the button to speak"
-        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Press Start and Speak Clearly"
         android:textSize="18sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textColor="#003B73"
+        android:gravity="center"
+        android:padding="14dp"
+        android:layout_marginBottom="20dp"
+        android:background="#FFFFFF" />
 
+    <!-- START LISTENING BUTTON -->
     <Button
         android:id="@+id/startButton"
-        android:text="Start Listening"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        android:text="Speak"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="#1B5E20"
+        android:padding="14dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#A8E6A3" />
 
-    <Button
-        android:id="@+id/backBtn"
-        android:text="Back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
-
+    <!-- STOP BUTTON -->
     <Button
         android:id="@+id/stopButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="STOP"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="@android:color/white"/>
+        android:text="Stop"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="#C62828"
+        android:padding="14dp"
+        android:layout_marginBottom="22dp"
+        android:backgroundTint="#F8B4B4" />
+
+    <!-- BACK BUTTON -->
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back to Main Menu"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="#0D1B2A"
+        android:padding="14dp"
+        android:backgroundTint="#D6ECFF" />
+
 </LinearLayout>

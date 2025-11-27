@@ -1,73 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5EEDC"
     tools:context=".MedicalRecordsActivity">
 
     <LinearLayout
         android:id="@+id/medicalRecordsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FAFAFA"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context=".MedicalRecordsActivity">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- Title -->
         <TextView
             android:id="@+id/recordsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="10dp"
             android:text="Medical Records"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#4B4B4B"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp" />
 
-        <ListView
-            android:id="@+id/recordsListView"
+        <!-- White container for medical records -->
+        <LinearLayout
+            android:id="@+id/recordsContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:background="#FFFFFF"
-            android:dividerHeight="8dp" />
+            android:padding="14dp"
+            android:layout_marginBottom="16dp">
 
+            <ListView
+                android:id="@+id/recordsListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="8dp"
+                android:divider="@android:color/transparent"/>
+        </LinearLayout>
+
+        <!-- Add medical record input -->
         <EditText
             android:id="@+id/newRecordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/edit_text"
             android:hint="Enter new medical record"
-            android:padding="10dp" />
+            android:padding="12dp"
+            android:textColor="#333333"
+            android:textColorHint="#9E9E9E"
+            android:background="#FFFFFF" />
 
-        <Button
+        <!-- Add record button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addRecordBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#1976D2"
+            android:layout_marginTop="14dp"
             android:text="Add Record"
-            android:textColor="#FFFFFF" />
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#0D1B2A"
+            android:padding="12dp"
+            app:backgroundTint="#BDE0FE"
+            />
 
-        <Button
+
+        <!-- Delete all records button (PASTEL RED) -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/deleteRecordsBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#D32F2F"
+            android:layout_marginTop="12dp"
             android:text="Delete All Records"
-            android:textColor="#FFFFFF" />
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#C62828"
+            android:padding="12dp"
+            app:backgroundTint="#F8B4B4"
+            />
 
-        <Button
+
+        <!-- Back button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/backBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#757575"
+            android:layout_marginTop="12dp"
             android:text="Back to Main Menu"
-            android:textColor="#FFFFFF" />
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#0D1B2A"
+            android:padding="12dp"
+            app:backgroundTint="#D6ECFF"
+            />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

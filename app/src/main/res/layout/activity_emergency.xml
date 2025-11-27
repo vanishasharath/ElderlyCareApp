@@ -1,111 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
+    android:background="#F5EEDC"
     android:padding="20dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <!-- 🔙 Back Button -->
-        <Button
+        <!-- Back Button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/backBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="← Back to Main Menu"
-            android:backgroundTint="#607D8B"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp" />
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#0D1B2A"
+            android:padding="12dp"
+            app:backgroundTint="#D6ECFF"
+            android:layout_marginBottom="20dp" />
 
         <!-- Title -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="🚨 Emergency Contacts"
-            android:textSize="22sp"
+            android:text="Emergency Contacts"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="#4B4B4B"
+            android:gravity="center"
             android:layout_marginBottom="20dp" />
 
-        <!-- Buttons -->
-        <Button
+        <!-- EMERGENCY BUTTONS -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/ambulanceBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Call Ambulance 🚑"
-            android:backgroundTint="#E53935"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="10dp" />
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:padding="14dp"
+            app:backgroundTint="#EF5350"
+            android:layout_marginBottom="12dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/policeBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Call Police 👮"
-            android:backgroundTint="#3949AB"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="10dp" />
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:padding="14dp"
+            app:backgroundTint="#42A5F5"
+            android:layout_marginBottom="12dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fireBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Call Fire Department 🔥"
-            android:backgroundTint="#F57C00"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="10dp" />
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:padding="14dp"
+            app:backgroundTint="#FFB74D"
+            android:layout_marginBottom="24dp" />
 
+        <!-- Personal contact title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add a Personal Contact"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"
-            android:gravity="center" />
+            android:textColor="#0D1B2A"
+            android:gravity="center"
+            android:paddingBottom="10dp" />
 
+        <!-- Inputs -->
         <EditText
             android:id="@+id/contactNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter contact name" />
+            android:hint="Enter contact name"
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:textColor="#333333"
+            android:textColorHint="#9E9E9E" />
 
         <EditText
             android:id="@+id/contactNumberInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter 10-digit mobile number"
+            android:hint="Enter 10-digit phone number"
             android:inputType="number"
             android:maxLength="10"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="8dp"
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:textColor="#333333"
+            android:textColorHint="#9E9E9E" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addContactBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Contact"
-            android:layout_marginTop="10dp" />
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#0D1B2A"
+            android:padding="12dp"
+            app:backgroundTint="#BDE0FE"
+            android:layout_marginTop="14dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/deleteContactsBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Delete All Contacts"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#D32F2F"
-            android:textColor="#FFFFFF" />
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="#C62828"
+            android:padding="12dp"
+            app:backgroundTint="#F8B4B4"
+            android:layout_marginTop="12dp" />
 
-        <ListView
-            android:id="@+id/contactListView"
+        <!-- Contact list container -->
+        <LinearLayout
+            android:id="@+id/contactListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:dividerHeight="1dp" />
+            android:background="#FFFFFF"
+            android:padding="14dp"
+            android:layout_marginTop="16dp">
+
+            <ListView
+                android:id="@+id/contactListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="8dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

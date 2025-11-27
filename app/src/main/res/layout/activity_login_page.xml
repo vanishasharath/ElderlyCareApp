@@ -5,14 +5,16 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="24dp"
-    android:background="#FAFAFA">
+    android:background="#F5EEDC">
 
     <TextView
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Elderly Care App"
-        android:textSize="24sp"
+        android:textSize="26sp"
         android:textStyle="bold"
+        android:textColor="#4B4B4B"
         android:layout_marginBottom="32dp" />
 
     <EditText
@@ -20,7 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Email"
-        android:inputType="textEmailAddress"
+        android:padding="14dp"
+        android:textColor="#333333"
+        android:textColorHint="#9E9E9E"
+        android:background="#FFFFFF"
         android:layout_marginBottom="16dp" />
 
     <EditText
@@ -28,7 +33,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Password"
+        android:padding="14dp"
         android:inputType="textPassword"
+        android:textColor="#333333"
+        android:textColorHint="#9E9E9E"
+        android:background="#FFFFFF"
         android:layout_marginBottom="24dp" />
 
     <Button
@@ -36,14 +45,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:layout_marginBottom="12dp" />
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="#0D1B2A"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="#BDE0FE" />
 
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:backgroundTint="#4CAF50"
-        android:textColor="@android:color/white" />
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="#0D1B2A"
+        android:padding="12dp"
+        android:background="#BDE0FE" />
 
 </LinearLayout>

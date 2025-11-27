@@ -1,68 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5EEDC"
+    tools:context=".Maincode">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".Maincode">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
-        <Button
-            android:id="@+id/medicalRecordsBtn"
+        <ImageButton
+            android:id="@+id/settingsBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Settings"
+            android:padding="12dp"
+            android:src="@drawable/baseline_settings_24" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Medical Records" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/remindersBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reminders" />
+            <TextView
+                android:id="@+id/mainTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text=" DASHBOARD"
+                android:textColor="#4B4B4B"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/entertainmentBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Entertainment" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/emergencyBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Emergency" />
+                <Button
+                    android:id="@+id/medicalRecordsBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#BDE0FE"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="Medical Records"
+                    android:textAllCaps="false"
+                    android:textColor="#003B73"
+                    android:textSize="18sp"
+                    app:cornerRadius="12dp" />
 
-        <Button
-            android:id="@+id/checkinBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Daily Check-In" />
+                <Button
+                    android:id="@+id/remindersBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#BDE0FE"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="Reminders"
+                    android:textAllCaps="false"
+                    android:textColor="#003B73"
+                    android:textSize="18sp"
+                    app:cornerRadius="12dp" />
 
-        <Button
-            android:id="@+id/appointmentsBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Appointments" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#FF4C4C"
-            android:textColor="@android:color/white"
-            android:layout_margin="16dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/voiceBtn"
-            android:text="🎙 Voice Assistant"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
+                <Button
+                    android:id="@+id/entertainmentBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#BDE0FE"
+                    android:gravity="center"
+                    android:text="Entertainment"
+                    android:textAllCaps="false"
+                    android:textColor="#003B73"
+                    android:textSize="18sp"
+                    app:cornerRadius="12dp" />
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/emergencyBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#BDE0FE"
+                    android:gravity="center"
+                    android:text="Emergency"
+                    android:textAllCaps="false"
+                    android:textColor="#003B73"
+                    android:textSize="18sp"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/checkinBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#BDE0FE"
+                    android:gravity="center"
+                    android:text="Daily Check-in"
+                    android:textAllCaps="false"
+                    android:textColor="#003B73"
+                    android:textSize="18sp"
+                    app:cornerRadius="12dp" />
+
+                <Button
+                    android:id="@+id/appointmentsBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#BDE0FE"
+                    android:gravity="center"
+                    android:text="Appointments"
+                    android:textAllCaps="false"
+                    android:textColor="#003B73"
+                    android:textSize="18sp"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/voiceBtn"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/circle_background"
+                android:contentDescription="Voice Assistant"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_btn_speak_now" />
+
+            <Button
+                android:id="@+id/logoutBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#FF6B6B"
+                android:padding="14dp"
+                android:text="Logout"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                app:cornerRadius="20dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

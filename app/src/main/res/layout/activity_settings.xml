@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Notification Settings -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp" />
+
+        <Switch
+            android:id="@+id/notificationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Reminder Notifications" />
+
+        <!-- Text Size -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text Size"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp" />
+
+        <SeekBar
+            android:id="@+id/textSizeSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="30"
+            android:progress="16" />
+
+        <TextView
+            android:id="@+id/textSizePreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preview Text"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+
+
+        <!-- Music Sound -->
+        <Switch
+            android:id="@+id/musicSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Music / Sound Effects"
+            android:layout_marginTop="20dp" />
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:textColor="#003B73"
+            android:layout_marginTop="30dp" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Settings Icon"
+            android:padding="10dp"
+            android:layout_marginBottom="20dp"/>
+
+
+
+    </LinearLayout>
+</ScrollView>

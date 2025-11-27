@@ -11,27 +11,21 @@
         android:id="@+id/reminderInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="e.g., Take medication" />
+        android:hint="e.g., Doctor's appointment" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/setReminderBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="Set Date &amp; Time"
+        android:textColor="#003B73"/>
 
-        <Button
-            android:id="@+id/addReminderBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add Reminder to List" />
-
-        <Button
-            android:id="@+id/sendNotificationBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Set Timed Notification" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Your Reminders:"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/reminderList"
@@ -40,19 +34,39 @@
         android:layout_weight="1"
         android:layout_marginTop="8dp" />
 
-    <!-- DEFINITIVE FIX: Added the missing Delete and Back buttons -->
-    <Button
-        android:id="@+id/deleteBtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:text="Delete All Reminders" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/deleteSelectedBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delete Selected"
+            android:textColor="#C62828"
+            android:backgroundTint="#F8B4B4"
+            android:layout_marginEnd="12dp" />
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delete All"
+            android:textColor="#C62828"
+            android:backgroundTint="#F8B4B4"
+            android:layout_marginStart="12dp" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:text="Back" />
+        android:text="Back"
+        android:textColor="#003B73"/>
 
 </LinearLayout>
