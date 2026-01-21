@@ -56,7 +56,7 @@ AlarmManager & Notifications	Scheduling timed reminders
 Intent.ACTION_CALL	Emergency calling
 Gradle Kotlin DSL (.kts)	Build configuration
 
-<img width="760" height="1572" alt="image" src="https://github.com/user-attachments/assets/4d22d4ae-b90c-4f59-8e8d-7a92a5af1470" />
+<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/4d22d4ae-b90c-4f59-8e8d-7a92a5af1470" />
 <img width="874" height="1590" alt="image" src="https://github.com/user-attachments/assets/1e8098a5-1476-4c07-a187-4441aebcf766" />
 <img width="916" height="1574" alt="image" src="https://github.com/user-attachments/assets/72fb9a29-4119-4373-b140-0f64b5cad1ef" />
 <img width="864" height="1572" alt="image" src="https://github.com/user-attachments/assets/6a5ede6c-3aa2-4e23-b542-43729b4b7fdc" />
