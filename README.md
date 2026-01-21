@@ -56,15 +56,15 @@ AlarmManager & Notifications	Scheduling timed reminders
 Intent.ACTION_CALL	Emergency calling
 Gradle Kotlin DSL (.kts)	Build configuration
 
-<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/4d22d4ae-b90c-4f59-8e8d-7a92a5af1470" />
-<img width="874" height="1590" alt="image" src="https://github.com/user-attachments/assets/1e8098a5-1476-4c07-a187-4441aebcf766" />
-<img width="916" height="1574" alt="image" src="https://github.com/user-attachments/assets/72fb9a29-4119-4373-b140-0f64b5cad1ef" />
-<img width="864" height="1572" alt="image" src="https://github.com/user-attachments/assets/6a5ede6c-3aa2-4e23-b542-43729b4b7fdc" />
-<img width="796" height="1592" alt="image" src="https://github.com/user-attachments/assets/606ead13-b2a2-482d-a7c4-b115bff1aec7" />
-<img width="836" height="1576" alt="image" src="https://github.com/user-attachments/assets/1dc365f2-14aa-4f17-930c-63d6d27c2ac5" />
-<img width="808" height="1594" alt="image" src="https://github.com/user-attachments/assets/62f2078e-49fb-4a8c-b844-c1e35eafdad6" />
-<img width="886" height="1584" alt="image" src="https://github.com/user-attachments/assets/9e1f5565-070f-4857-8a02-e0bda447dc1c" />
-<img width="860" height="1574" alt="image" src="https://github.com/user-attachments/assets/05f7a68a-0ba1-40f4-b670-394693aa328d" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/4d22d4ae-b90c-4f59-8e8d-7a92a5af1470" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/1e8098a5-1476-4c07-a187-4441aebcf766" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/72fb9a29-4119-4373-b140-0f64b5cad1ef" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/6a5ede6c-3aa2-4e23-b542-43729b4b7fdc" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/606ead13-b2a2-482d-a7c4-b115bff1aec7" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/1dc365f2-14aa-4f17-930c-63d6d27c2ac5" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/62f2078e-49fb-4a8c-b844-c1e35eafdad6" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/9e1f5565-070f-4857-8a02-e0bda447dc1c" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/05f7a68a-0ba1-40f4-b670-394693aa328d" />
 
 
 
