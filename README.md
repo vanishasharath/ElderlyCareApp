@@ -43,18 +43,17 @@ STOP button to interrupt speech playback
 User Speaks → STT → Gemini REST API (OkHttp) → AI Response → UI Display + TTS Output
 
 🧑‍💻 Technologies & Tools
-Tool / Tech	Purpose
-Android Studio (Java)	Main application development
-Firebase Authentication	Secure login & session handling
-Firebase Firestore	Cloud database & real‑time data sync
-Google Gemini Generative AI (REST API)	AI answering & conversation
-OkHttp Client	Sending API requests
-SpeechRecognizer / RecognizerIntent	Voice input processing
-TextToSpeech (TTS)	AI voice output
-ViewBinding	Modern UI handling
-AlarmManager & Notifications	Scheduling timed reminders
-Intent.ACTION_CALL	Emergency calling
-Gradle Kotlin DSL (.kts)	Build configuration
+Android Studio (Java):	Main application development,
+Firebase Authentication: Secure login & session handling,
+Firebase Firestore: Cloud database & real‑time data sync,
+Google Gemini Generative AI (REST API):	AI answering & conversation,
+OkHttp: Client	Sending API requests,
+SpeechRecognizer / RecognizerIntent:	Voice input processing,
+TextToSpeech (TTS): AI voice output,
+ViewBinding	: Modern UI handling,
+AlarmManager & Notifications: Scheduling timed reminders,
+Intent.ACTION_CALL:	Emergency calling,
+Gradle Kotlin DSL (.kts):	Build configuration,
 
 <img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/4d22d4ae-b90c-4f59-8e8d-7a92a5af1470" />
 <img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/1e8098a5-1476-4c07-a187-4441aebcf766" />
