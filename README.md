@@ -4,6 +4,8 @@ The Elderly Care Android Application is a voice-enabled smart assistant designed
 
 Built with secure Firebase Authentication and Cloud Firestore, the app ensures that all personal and medical data is stored safely in the cloud, enabling usage across multiple devices with backup support.
 
+--- 
+
 ## 🎯 Objectives
 Provide an accessible, hands-free experience for elderly users.
 
@@ -12,6 +14,8 @@ Ensure secure storage and backup of sensitive personal health data.
 Enable intelligent voice‑based interaction and emergency support.
 
 Integrate real‑time AI assistance.
+
+---
 
 ## 🧠 Key Features
 
@@ -57,9 +61,13 @@ Works even if app is closed or in background
   
 * STOP button to interrupt speech playback
 
+---
+
 ### 🏗 Architecture Flow
 
 User Speaks → STT → Gemini REST API (OkHttp) → AI Response → UI Display + TTS Output
+
+---
 
 ### 🧑‍💻 Technologies & Tools
 
@@ -84,6 +92,8 @@ AlarmManager & Notifications: Scheduling timed reminders
 Intent.ACTION_CALL:	Emergency calling
 
 Gradle Kotlin DSL (.kts):	Build configuration
+
+---
 
 
 <img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/4d22d4ae-b90c-4f59-8e8d-7a92a5af1470" />
