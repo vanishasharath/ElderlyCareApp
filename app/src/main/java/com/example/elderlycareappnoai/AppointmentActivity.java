@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -36,7 +35,6 @@ public class AppointmentActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private ArrayList<AppointmentItem> appointmentItems;
     private AppointmentAdapter adapter;
-    private SharedPreferences sharedPreferences;  // ADD THIS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,6 @@ public class AppointmentActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        sharedPreferences = getSharedPreferences("appointments", MODE_PRIVATE);  // ADD THIS
 
         if (currentUser == null) {
             finish();
@@ -54,7 +51,7 @@ public class AppointmentActivity extends AppCompatActivity {
         }
 
         appointmentItems = new ArrayList<>();
-        adapter = new AppointmentAdapter(this, appointmentItems, this::saveCheckboxState);  // MODIFIED
+        adapter = new AppointmentAdapter(this, appointmentItems);
         binding.appointmentsListView.setAdapter(adapter);
 
         loadAppointments();
@@ -66,6 +63,13 @@ public class AppointmentActivity extends AppCompatActivity {
     }
 
     private void loadAppointments() {
+        Set<String> checkedIds = new HashSet<>();
+        for (AppointmentItem item : appointmentItems) {
+            if (item.isChecked()) {
+                checkedIds.add(item.getDocumentId());
+            }
+        }
+
         db.collection("users").document(currentUser.getUid()).collection("appointments")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get()
@@ -76,12 +80,11 @@ public class AppointmentActivity extends AppCompatActivity {
                             String docId = document.getId();
                             String text = document.getString("text");
                             String time = document.getString("displayDateTime");
+
                             AppointmentItem newItem = new AppointmentItem(docId, time + ": " + text);
-
-                            // RESTORE CHECKBOX STATE FROM SHAREDPREFERENCES
-                            boolean isChecked = sharedPreferences.getBoolean("appointment_" + docId, false);
-                            newItem.setChecked(isChecked);
-
+                            if (checkedIds.contains(docId)) {
+                                newItem.setChecked(true);
+                            }
                             appointmentItems.add(newItem);
                         }
                         adapter.notifyDataSetChanged();
@@ -91,23 +94,12 @@ public class AppointmentActivity extends AppCompatActivity {
                 });
     }
 
-    // ADD THIS METHOD - Called by adapter when checkbox is clicked
-    private void saveCheckboxState(String documentId, boolean isChecked) {
-        sharedPreferences.edit()
-                .putBoolean("appointment_" + documentId, isChecked)
-                .apply();
-    }
-
     private void deleteSelectedAppointments() {
         ArrayList<AppointmentItem> itemsToRemove = new ArrayList<>();
         for (AppointmentItem item : appointmentItems) {
             if (item.isChecked()) {
                 db.collection("users").document(currentUser.getUid())
                         .collection("appointments").document(item.getDocumentId()).delete();
-
-                // REMOVE FROM SHAREDPREFERENCES TOO
-                sharedPreferences.edit().remove("appointment_" + item.getDocumentId()).apply();
-
                 itemsToRemove.add(item);
             }
         }
@@ -170,7 +162,6 @@ public class AppointmentActivity extends AppCompatActivity {
                     binding.appointmentInput.setText("");
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
         NotificationHelper.scheduleNotification(this, triggerAtMillis, "Appointment: " + appointmentText, AppointmentActivity.class);
     }
 
@@ -178,14 +169,9 @@ public class AppointmentActivity extends AppCompatActivity {
         db.collection("users").document(currentUser.getUid()).collection("appointments")
                 .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // CLEAR ALL CHECKBOX STATES
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             document.getReference().delete();
-                            editor.remove("appointment_" + document.getId());
                         }
-                        editor.apply();
-
                         Toast.makeText(this, "All appointments deleted.", Toast.LENGTH_SHORT).show();
                         loadAppointments();
                     }

@@ -1,34 +1,43 @@
 package com.example.elderlycareappnoai;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.elderlycareappnoai.databinding.ActivityChatBinding;
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
 
-import java.io.IOException;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ChatActivity extends AppCompatActivity {
 
     private ActivityChatBinding binding;
-    private final OkHttpClient client = new OkHttpClient();
+    private GenerativeModelFutures generativeModel;
+    private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Initialize the Gemini SDK
+        try {
+            GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.GEMINI_API_KEY);
+            generativeModel = GenerativeModelFutures.from(gm);
+        } catch (Exception e) {
+            binding.chatView.setText("AI Error: Could not initialize model.");
+            return;
+        }
 
         binding.chatView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -38,67 +47,57 @@ public class ChatActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please enter a message.", Toast.LENGTH_SHORT).show();
                 return;
             }
-            sendMessageToGemini(userInput);
+            // Logic starts here
+            processChatCommand(userInput);
         });
     }
 
-    private void sendMessageToGemini(String userInput) {
-        binding.chatView.append("You: " + userInput + "\n\n");
+    // --- DEFINITIVE FIX: Logic to recognize reminder commands ---
+    private void processChatCommand(String input) {
+        binding.chatView.append("You: " + input + "\n\n");
         binding.userInput.setText("");
         binding.sendButton.setEnabled(false);
 
-        String jsonBody = "{ \"contents\": [{ \"parts\": [{ \"text\": \"" + userInput + "\" }] }] }";
+        String lowerCaseInput = input.toLowerCase();
 
-        RequestBody body = RequestBody.create(
-                jsonBody, MediaType.get("application/json; charset=utf-8"));
+        if (lowerCaseInput.contains("remind me to")) {
+            // Extract the reminder text
+            int index = lowerCaseInput.indexOf("remind me to");
+            String reminderText = input.substring(index + "remind me to".length()).trim();
 
-        Request request = new Request.Builder()
-                .url("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + BuildConfig.GEMINI_API_KEY)
-                .post(body)
-                .build();
+            if (reminderText.isEmpty()) {
+                displayAIResponse("What would you like to be reminded of?");
+            } else {
+                displayAIResponse("Okay! Opening reminders to set an alarm for: " + reminderText);
 
-        new Thread(() -> {
-            try {
-                Response response = client.newCall(request).execute();
-                String raw = response.body().string();
-
-                if (response.isSuccessful()) {
-                    String aiReply = parseGeminiResponse(raw);
-
-                    runOnUiThread(() -> {
-                        binding.chatView.append("AI: " + aiReply + "\n\n");
-                        binding.sendButton.setEnabled(true);
-                    });
-
-                } else {
-                    runOnUiThread(() -> {
-                        binding.chatView.append("AI Error: " + response.message() + "\n\n");
-                        binding.sendButton.setEnabled(true);
-                    });
-                }
-
-            } catch (IOException e) {
-                runOnUiThread(() -> {
-                    binding.chatView.append("Exception: " + e.getMessage() + "\n\n");
-                    binding.sendButton.setEnabled(true);
-                });
+                // Launch ReminderActivity and pass the text
+                Intent intent = new Intent(this, ReminderActivity.class);
+                intent.putExtra(VoiceAssistantActivity.EXTRA_REMINDER_TEXT, reminderText);
+                startActivity(intent);
             }
-        }).start();
+        } else {
+            // If it's not a command, just chat with Gemini
+            sendTextToGemini(input);
+        }
     }
 
-    private String parseGeminiResponse(String json) {
-        try {
-            JSONObject root = new JSONObject(json);
-            JSONArray candidates = root.getJSONArray("candidates");
-            JSONObject firstCandidate = candidates.getJSONObject(0);
-            JSONObject content = firstCandidate.getJSONObject("content");
-            JSONArray parts = content.getJSONArray("parts");
-            JSONObject textPart = parts.getJSONObject(0);
+    private void sendTextToGemini(String userText) {
+        Content content = new Content.Builder().addText(userText).build();
+        Executor mainExecutor = ContextCompat.getMainExecutor(this);
 
-            return textPart.getString("text");
-        } catch (Exception e) {
-            Log.e("JSON_PARSE", "Error parsing", e);
-            return "Error parsing AI response.";
-        }
+        backgroundExecutor.execute(() -> {
+            try {
+                GenerateContentResponse response = generativeModel.generateContent(content).get();
+                String aiReply = response.getText();
+                mainExecutor.execute(() -> displayAIResponse(aiReply != null ? aiReply.trim() : "No response received."));
+            } catch (Exception e) {
+                mainExecutor.execute(() -> displayAIResponse("AI Error: " + e.getMessage()));
+            }
+        });
+    }
+
+    private void displayAIResponse(String text) {
+        binding.chatView.append("AI: " + text + "\n\n");
+        binding.sendButton.setEnabled(true);
     }
 }

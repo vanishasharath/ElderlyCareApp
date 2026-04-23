@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -24,8 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class ReminderActivity extends AppCompatActivity {
 
@@ -34,7 +35,6 @@ public class ReminderActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private ArrayList<ReminderItem> reminderItems;
     private ReminderAdapter adapter;
-    private SharedPreferences sharedPreferences;  // ADD THIS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,6 @@ public class ReminderActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        sharedPreferences = getSharedPreferences("reminders", MODE_PRIVATE);  // ADD THIS
 
         if (currentUser == null) {
             finish();
@@ -54,8 +53,15 @@ public class ReminderActivity extends AppCompatActivity {
         NotificationHelper.createNotificationChannel(this);
 
         reminderItems = new ArrayList<>();
-        adapter = new ReminderAdapter(this, reminderItems, this::saveCheckboxState);  // MODIFIED
+        adapter = new ReminderAdapter(this, reminderItems);
         binding.reminderList.setAdapter(adapter);
+
+        // --- DEFINITIVE FIX: Receive voice command text ---
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(VoiceAssistantActivity.EXTRA_REMINDER_TEXT)) {
+            String voiceText = intent.getStringExtra(VoiceAssistantActivity.EXTRA_REMINDER_TEXT);
+            binding.reminderInput.setText(voiceText); // This prints the voice text into the box
+        }
 
         loadReminders();
 
@@ -66,6 +72,13 @@ public class ReminderActivity extends AppCompatActivity {
     }
 
     private void loadReminders() {
+        Set<String> checkedIds = new HashSet<>();
+        for (ReminderItem item : reminderItems) {
+            if (item.isChecked()) {
+                checkedIds.add(item.getDocumentId());
+            }
+        }
+
         db.collection("users").document(currentUser.getUid()).collection("reminders")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get()
@@ -78,11 +91,9 @@ public class ReminderActivity extends AppCompatActivity {
                             String time = document.getString("displayDateTime");
 
                             ReminderItem newItem = new ReminderItem(docId, time + ": " + text);
-
-                            // RESTORE CHECKBOX STATE FROM SHAREDPREFERENCES
-                            boolean isChecked = sharedPreferences.getBoolean("reminder_" + docId, false);
-                            newItem.setChecked(isChecked);
-
+                            if (checkedIds.contains(docId)) {
+                                newItem.setChecked(true);
+                            }
                             reminderItems.add(newItem);
                         }
                         adapter.notifyDataSetChanged();
@@ -92,23 +103,12 @@ public class ReminderActivity extends AppCompatActivity {
                 });
     }
 
-    // ADD THIS METHOD - Called by adapter when checkbox is clicked
-    private void saveCheckboxState(String documentId, boolean isChecked) {
-        sharedPreferences.edit()
-                .putBoolean("reminder_" + documentId, isChecked)
-                .apply();
-    }
-
     private void deleteSelectedReminders() {
         ArrayList<ReminderItem> itemsToRemove = new ArrayList<>();
         for (ReminderItem item : reminderItems) {
             if (item.isChecked()) {
                 db.collection("users").document(currentUser.getUid())
                         .collection("reminders").document(item.getDocumentId()).delete();
-
-                // REMOVE FROM SHAREDPREFERENCES TOO
-                sharedPreferences.edit().remove("reminder_" + item.getDocumentId()).apply();
-
                 itemsToRemove.add(item);
             }
         }
@@ -178,14 +178,9 @@ public class ReminderActivity extends AppCompatActivity {
         db.collection("users").document(currentUser.getUid()).collection("reminders")
                 .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // CLEAR ALL CHECKBOX STATES
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             document.getReference().delete();
-                            editor.remove("reminder_" + document.getId());
                         }
-                        editor.apply();
-
                         Toast.makeText(this, "All reminders deleted.", Toast.LENGTH_SHORT).show();
                         loadReminders();
                     }

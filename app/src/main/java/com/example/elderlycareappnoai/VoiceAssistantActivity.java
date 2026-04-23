@@ -1,59 +1,59 @@
 package com.example.elderlycareappnoai;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
+import android.content.ActivityNotFoundException;import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.elderlycareappnoai.databinding.ActivityVoiceAssistantBinding;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class VoiceAssistantActivity extends AppCompatActivity {
 
+    public static final String EXTRA_REMINDER_TEXT = "com.example.elderlycareappnoai.REMINDER_TEXT";
     private ActivityVoiceAssistantBinding binding;
     private TextToSpeech tts;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private OkHttpClient client = new OkHttpClient();
+    private GenerativeModelFutures generativeModel;
+    private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
 
-    private final ActivityResultLauncher<String> permissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(),
-                    granted -> {
-                    });
-
-    private final ActivityResultLauncher<Intent> speechLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    private final ActivityResultLauncher<Intent> speechRecognitionLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    ArrayList<String> text = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    if (text != null && !text.isEmpty()) {
-                        String spoken = text.get(0);
-                        binding.textView.setText("You said: " + spoken);
-                        askGemini(spoken);
+                    ArrayList<String> matches = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (matches != null && !matches.isEmpty()) {
+                        String recognizedText = matches.get(0);
+                        binding.textView.setText("You said:\n" + recognizedText);
+                        processVoiceCommand(recognizedText);
                     }
                 } else {
-                    binding.textView.setText("Sorry, I couldn’t understand. Try again.");
+                    binding.textView.setText("Could not hear you. Please try again.");
+                }
+            });
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+                if (!isGranted) {
+                    Toast.makeText(this, "Microphone permission is required.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -63,9 +63,24 @@ public class VoiceAssistantActivity extends AppCompatActivity {
         binding = ActivityVoiceAssistantBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Initialize Gemini SDK
+        try {
+            GenerativeModel gm = new GenerativeModel("gemini-pro", BuildConfig.GEMINI_API_KEY);
+            generativeModel = GenerativeModelFutures.from(gm);
+        } catch (Exception e) {
+            binding.textView.setText("AI Error: Could not initialize model.");
+            return;
+        }
+
+        // --- DEFINITIVE FIX: Initialize Text-To-Speech ---
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
-                tts.setLanguage(Locale.US);
+                int result = tts.setLanguage(Locale.US);
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    Log.e("TTS", "Language not supported");
+                }
+            } else {
+                Log.e("TTS", "Initialization failed");
             }
         });
 
@@ -74,74 +89,74 @@ public class VoiceAssistantActivity extends AppCompatActivity {
     }
 
     private void startListening() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...");
             try {
-                speechLauncher.launch(intent);
+                speechRecognitionLauncher.launch(intent);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, "Speech recognizer not available", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Voice input not supported on this device.", Toast.LENGTH_LONG).show();
             }
         } else {
-            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
+            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
         }
     }
-    private void askGemini(String query) {
-        executor.execute(() -> {
+
+    private void processVoiceCommand(String command) {
+        String lowerCaseCommand = command.toLowerCase();
+
+        // Check if the user is asking to set a reminder
+        if (lowerCaseCommand.contains("remind me to")) {
+            String reminderText = "";
+            int index = lowerCaseCommand.indexOf("remind me to");
+            reminderText = command.substring(index + "remind me to".length()).trim();
+
+            if (reminderText.isEmpty()) {
+                speakAndDisplay("What would you like to be reminded of?");
+            } else {
+                speakAndDisplay("Okay, opening reminders for: " + reminderText);
+                Intent intent = new Intent(this, ReminderActivity.class);
+                intent.putExtra(EXTRA_REMINDER_TEXT, reminderText);
+                startActivity(intent);
+            }
+        } else {
+            // Otherwise, send to AI for a general answer
+            sendTextToAI(command);
+        }
+    }
+
+    private void sendTextToAI(String userText) {
+        binding.textView.append("\n\nThinking...");
+        Content content = new Content.Builder().addText(userText).build();
+        Executor mainExecutor = ContextCompat.getMainExecutor(this);
+
+        backgroundExecutor.execute(() -> {
             try {
-                JsonObject requestJson = new JsonObject();
-                JsonArray contents = new JsonArray();
-                JsonObject content = new JsonObject();
-                JsonArray parts = new JsonArray();
-                JsonObject text = new JsonObject();
-
-                text.addProperty("text", query);
-                parts.add(text);
-                content.add("parts", parts);
-                contents.add(content);
-                requestJson.add("contents", contents);
-
-                Request request = new Request.Builder()
-                        .url("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" + BuildConfig.GEMINI_API_KEY)
-                        .post(RequestBody.create(requestJson.toString(), MediaType.get("application/json; charset=utf-8")))
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                String body = response.body().string();
-
-                JsonObject jsonObject = JsonParser.parseString(body).getAsJsonObject();
-
-                if (jsonObject.has("error")) {
-                    String msg = jsonObject.getAsJsonObject("error").get("message").getAsString();
-                    runOnUiThread(() -> binding.textView.setText("AI Error: " + msg));
-                    return;
-                }
-
-                String reply = jsonObject.getAsJsonArray("candidates")
-                        .get(0).getAsJsonObject()
-                        .getAsJsonObject("content")
-                        .getAsJsonArray("parts")
-                        .get(0).getAsJsonObject()
-                        .get("text").getAsString();
-
-                runOnUiThread(() -> {
-                    binding.textView.setText("AI: " + reply);
-                    tts.speak(reply, TextToSpeech.QUEUE_FLUSH, null, null);
-                });
-
+                GenerateContentResponse response = generativeModel.generateContent(content).get();
+                String aiReply = response.getText();
+                mainExecutor.execute(() -> speakAndDisplay(aiReply != null ? aiReply.trim() : "I didn't get a response."));
             } catch (Exception e) {
-                runOnUiThread(() -> binding.textView.setText("Exception: " + e.getMessage()));
+                mainExecutor.execute(() -> speakAndDisplay("AI Error: " + e.getMessage()));
             }
         });
-        binding.stopButton.setOnClickListener(v -> {
-            if (tts != null) {
-                tts.stop();
-                Toast.makeText(this, "Stopped speaking", Toast.LENGTH_SHORT).show();
-            }
-        });
+    }
 
+    private void speakAndDisplay(String text) {
+        binding.textView.setText("AI: " + text);
+        // --- DEFINITIVE FIX: Trigger the voice output ---
+        if (tts != null) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "AI_UTTERANCE");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }

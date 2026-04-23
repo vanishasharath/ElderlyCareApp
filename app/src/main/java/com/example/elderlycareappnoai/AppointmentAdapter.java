@@ -4,80 +4,42 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import java.util.List;
 
-public class AppointmentAdapter extends BaseAdapter {
+public class AppointmentAdapter extends ArrayAdapter<AppointmentItem> {
 
-    private Context context;
-    private ArrayList<AppointmentItem> items;
-    private CheckboxStateCallback callback;  // ADD THIS
-
-    // ADD THIS INTERFACE
-    public interface CheckboxStateCallback {
-        void onCheckboxStateChanged(String documentId, boolean isChecked);
+    public AppointmentAdapter(Context context, List<AppointmentItem> appointmentItems) {
+        super(context, 0, appointmentItems);
     }
 
-    // MODIFIED CONSTRUCTOR - add callback parameter
-    public AppointmentAdapter(Context context, ArrayList<AppointmentItem> items, CheckboxStateCallback callback) {
-        this.context = context;
-        this.items = items;
-        this.callback = callback;
-    }
-
+    @NonNull
     @Override
-    public int getCount() {
-        return items.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return items.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        AppointmentItem appointmentItem = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.appointment_item, parent, false);
-            holder = new ViewHolder();
-            holder.checkBox = convertView.findViewById(R.id.item_checkbox);
-            holder.textView = convertView.findViewById(R.id.item_text);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_with_checkbox, parent, false);
         }
 
-        AppointmentItem item = items.get(position);
-        holder.textView.setText(item.getText());
+        TextView itemText = convertView.findViewById(R.id.item_text);
+        CheckBox itemCheckbox = convertView.findViewById(R.id.item_checkbox);
 
-        // Remove listener before setting checked state to prevent unwanted triggers
-        holder.checkBox.setOnCheckedChangeListener(null);
-        holder.checkBox.setChecked(item.isChecked());
+        if (appointmentItem != null) {
+            itemText.setText(appointmentItem.getDisplayString());
+            itemCheckbox.setChecked(appointmentItem.isChecked());
 
-        // Set listener to save state when checkbox is clicked
-        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            item.setChecked(isChecked);
-            // Save to SharedPreferences via callback
-            if (callback != null) {
-                callback.onCheckboxStateChanged(item.getDocumentId(), isChecked);
-            }
-        });
+            // Update the state in the data object when checked
+            itemCheckbox.setOnClickListener(v -> {
+                appointmentItem.setChecked(itemCheckbox.isChecked());
+            });
+        }
 
         return convertView;
-    }
-
-    private static class ViewHolder {
-        CheckBox checkBox;
-        TextView textView;
     }
 }
