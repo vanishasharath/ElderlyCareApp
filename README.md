@@ -1,19 +1,16 @@
-# ElderlyCareApp
+# 👴👵 ElderlyCareApp
 
-The Elderly Care Android Application is a voice-enabled smart assistant designed to help elderly users manage daily activities such as medical reminders, emergency contacts, appointments, and wellness tracking. The application integrates Google Gemini Generative AI, Speech-to-Text, and Text-to-Speech, enabling hands‑free and accessible interaction.
-
-Built with secure Firebase Authentication and Cloud Firestore, the app ensures that all personal and medical data is stored safely in the cloud, enabling usage across multiple devices with backup support.
+An AI-powered Android application designed to help elderly users manage daily activities through voice interaction, smart reminders, emergency support, and secure health data management.
+Built with Google Gemini AI, Firebase, and Android (Java) — the app provides a hands-free, accessible experience tailored for elderly users.
 
 --- 
 
 ## 🎯 Objectives
-Provide an accessible, hands-free experience for elderly users.
 
-Ensure secure storage and backup of sensitive personal health data.
-
-Enable intelligent voice‑based interaction and emergency support.
-
-Integrate real‑time AI assistance.
+* Provide an accessible, hands-free experience for elderly users
+* Ensure secure cloud storage and backup of sensitive personal health data
+* Enable intelligent voice-based AI interaction
+* Support real emergency calling and reliable background notifications
 
 ---
 
@@ -22,51 +19,49 @@ Integrate real‑time AI assistance.
 ### 🔐 User Authentication
 
 * Firebase email‑password based login & registration
-
-* Secure session management & logout functionality
-  
+* Secure session management & logout functionality 
 * One‑user‑at‑a‑time standard model for security
 
 ### 🏥 Medical & Personal Data Management
 
-* Appointments scheduling and viewing
-  
+* Appointments scheduling and viewing  
 * Medication & general reminders with timed push notifications
-  
 * Medical records and personal health notes
-  
 * Daily check‑in mood and pain scale tracking
-  
 * Emergency contacts + quick dial (police, ambulance, fire service)
 
 ### 📞 Emergency Call System
 
 * Real phone call functionality using Intent.ACTION_CALL
-  
 * Android permission request & handling logic
 
 ### 🔔 Reminder Notifications
 
 * AlarmManager + BroadcastReceiver + NotificationManager
-  
-Works even if app is closed or in background
+* Notifications persist even when app is closed or in background
 
 ### 🎤 Voice AI Assistant
 
 * Speech‑to‑Text and Text‑to‑Speech enabled interaction
-
 * REST API via OkHttp to Google Gemini Generative AI
-  
-* AI response spoken aloud and displayed on screen
-  
+* AI response spoken aloud and displayed on screen 
 * STOP button to interrupt speech playback
 
 ---
 
 ### 🏗 Architecture Flow
 
-User Speaks → STT → Gemini REST API (OkHttp) → AI Response → UI Display + TTS Output
-
+```
+User Speaks
+    ↓
+Speech-to-Text (Android SpeechRecognizer)
+    ↓
+REST API Request (OkHttp → Google Gemini)
+    ↓
+AI Response Generated
+    ↓
+Display on Screen + Text-to-Speech Output
+```
 ---
 
 ### 🧑‍💻 Technologies & Tools
@@ -95,6 +90,42 @@ Gradle Kotlin DSL (.kts):	Build configuration
 
 ---
 
+⚙️ How to Run Locally
+Prerequisites
+
+Android Studio installed
+A Firebase project set up (Firebase Console)
+A Google Gemini API key (Google AI Studio)
+
+Steps
+
+Clone the repository
+
+bashgit clone https://github.com/your-username/ElderlyCareApp.git
+
+Open in Android Studio
+
+File → Open → select the project folder
+
+
+Connect Firebase
+
+Download google-services.json from your Firebase project
+Place it in the /app directory
+
+
+Add your Gemini API key
+
+Open the VoiceAssistant activity file
+Replace the placeholder with your API key
+
+
+Build and Run
+
+Connect an Android device or start an emulator
+Click Run ▶️
+
+---
 
 <img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/4d22d4ae-b90c-4f59-8e8d-7a92a5af1470" />
 <img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/1e8098a5-1476-4c07-a187-4441aebcf766" />
